@@ -3,6 +3,8 @@
 
 #include "framework.h"
 #include "Inventory.h"
+#include "windowsx.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -123,6 +125,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    HDC hdc;
+    POINT pt;
     switch (message)
     {
     case WM_COMMAND:
@@ -142,12 +146,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-    case WM_PAINT:
+
+    case WM_LBUTTONDOWN:
         {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-            EndPaint(hWnd, &ps);
+        hdc = GetDC(hWnd);
+        pt.x = GET_X_LPARAM(lParam);
+        pt.y = GET_Y_LPARAM(lParam);
+        TextOut(hdc, pt.x, pt.y, L"WM_LBUTTONDOWN EVENT", 15);
+        ReleaseDC(hWnd, hdc);
         }
         break;
     case WM_DESTROY:
