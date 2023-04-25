@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "Inventory.h"
 #include "windowsx.h"
+#include <string>
 
 
 #define MAX_LOADSTRING 100
@@ -127,6 +128,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
     POINT pt;
+    RECT rect;
     switch (message)
     {
     case WM_COMMAND:
@@ -152,7 +154,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         hdc = GetDC(hWnd);
         pt.x = GET_X_LPARAM(lParam);
         pt.y = GET_Y_LPARAM(lParam);
-        TextOut(hdc, pt.x, pt.y, L"WM_LBUTTONDOWN EVENT", 15);
+        std::string text;
+        std::wstring wtext;
+        if (GetWindowRect(hWnd, &rect))
+        {
+            LONG X = pt.x / 40;
+            LONG Y = pt.y / 40;
+            //X /= 40;
+            //Y /= 40;
+            // rect를 구할 필요가 없다.... 상대 좌표로 나온다.
+            text = std::to_string(X);
+            text.append(" ");
+            text.append(std::to_string(Y));
+            wtext.assign(text.begin(), text.end());
+            TextOut(hdc, pt.x, pt.y, wtext.c_str(), wtext.size());
+        }
+
         ReleaseDC(hWnd, hdc);
         }
         break;
